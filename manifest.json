@@ -1,0 +1,23 @@
+{
+ "name": "Duncan's Mess Up Fess Up Flight 2: Wings of Grace",
+ "short_name": "Duncan 2",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "any",
+ "background_color": "#7fb3ff",
+ "theme_color": "#7fb3ff",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ]
+}
