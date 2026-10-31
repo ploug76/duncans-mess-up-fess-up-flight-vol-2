@@ -74,16 +74,16 @@ function drawDuncan(px,py,sc,o){o=o||{};const s=sc;X.save();X.translate(px,py);X
  X.strokeStyle='#c9ccd1';X.lineWidth=.8*s;X.beginPath();X.moveTo(-8.5*s,12.6*s);X.quadraticCurveTo(0,14.6*s,8.5*s,12.6*s);X.stroke();
  X.fillStyle='#3a2416';X.beginPath();X.ellipse(0,17*s,3.8*s,4.4*s,0,0,TAU);X.fill();X.fillStyle='#d9dde2';X.beginPath();X.ellipse(0,13.9*s,3.4*s,1.5*s,0,0,TAU);X.fill();
  for(const k of[-1.8,0,1.8]){R('#e6e8eb',k-.25,16,.5,2.2);poly('#f4f5f7',[k,17.6,k-.8,20.2,k+.8,20.2])}
- R('#f2c9a8',-2.2,-2,4.4,3);dot('#f2c9a8',0,-9,9);dot('#f2c9a8',-8.8,-8.6,1.6);dot('#f2c9a8',8.8,-8.6,1.6);
+ R('#f2c9a8',-2.2,-2,4.4,3);dot('#f2c9a8',0,-9,9);dot('#f2c9a8',-8.8,-8.6,1.6);if(!(o.turn>.4))dot('#f2c9a8',8.8,-8.6,1.6);const tu=o.turn||0;
  X.fillStyle='#f1f1f1';X.beginPath();X.arc(0,-10.5*s,9.4*s,Math.PI*1.03,Math.PI*1.97);X.quadraticCurveTo(4*s,-15.8*s,0,-15.4*s);X.quadraticCurveTo(-5*s,-15.8*s,-9.2*s,-12*s);X.fill();
  R('#e4e4e6',-9.4,-13,2.2,4.5);R('#e4e4e6',7.2,-13,2.2,4.5);
- dot('rgba(240,130,120,.35)',-5.4,-5.2,1.8);dot('rgba(240,130,120,.35)',5.4,-5.2,1.8);
+ /* facing check (Oct 30 2026): walking -> face turns 3/4 toward travel (+x) */X.save();X.translate(tu*3*s,-9*s);X.scale(1-.22*tu,1);X.translate(0,9*s);if(tu>.02)dot('#f2c9a8',8.6,-6.8,1.8*tu);dot('rgba(240,130,120,.35)',-5.4,-5.2,1.8);dot('rgba(240,130,120,.35)',5.4,-5.2,1.8);
  const emo=o.emo||'smile';
  if(emo==='oops'){X.strokeStyle='#333';X.lineWidth=.9*s;for(const ex of[-3.7,3.7]){X.beginPath();X.moveTo((ex-1.2)*s,-9.6*s);X.lineTo((ex+1.2)*s,-7.8*s);X.moveTo((ex+1.2)*s,-9.6*s);X.lineTo((ex-1.2)*s,-7.8*s);X.stroke()}}
  else if(o.blink)R('#333',-4.6,-8.6,1.8,.5),R('#333',2.8,-8.6,1.8,.5);else{R('#333',-4.6,-9.4,1.8,1.8);R('#333',2.8,-9.4,1.8,1.8)}
  X.strokeStyle='#8a7a5a';X.lineWidth=.9*s;K.rr(-7.2*s,-11.4*s,6*s,4.6*s,1.6*s);X.stroke();K.rr(1.2*s,-11.4*s,6*s,4.6*s,1.6*s);X.stroke();X.beginPath();X.moveTo(-1.2*s,-9.6*s);X.lineTo(1.2*s,-9.6*s);X.stroke();
  X.strokeStyle='#7a4232';X.lineWidth=.8*s;X.lineCap='round';X.beginPath();if(emo==='oops')X.arc(0,-3.6*s,1.6*s,0,TAU);else if(emo==='joy'){X.fillStyle='#7a4232';X.arc(0,-5.6*s,3*s,.1*Math.PI,.9*Math.PI);X.fill()}else X.arc(0,-5.4*s,2.8*s,.22*Math.PI,.78*Math.PI);X.stroke();
- X.strokeStyle='#ffd700';X.lineWidth=3*s;X.shadowColor='#fff38a';X.shadowBlur=15*s;X.beginPath();X.ellipse(0,-24*s+Math.sin(RT*3)*.8*s,11*s,4*s,0,0,TAU);X.stroke();X.shadowBlur=0;
+ X.restore();X.strokeStyle='#ffd700';X.lineWidth=3*s;X.shadowColor='#fff38a';X.shadowBlur=15*s;X.beginPath();X.ellipse(0,-24*s+Math.sin(RT*3)*.8*s,11*s,4*s,0,0,TAU);X.stroke();X.shadowBlur=0;
  if(o.shield){X.globalAlpha*=.55+.2*Math.sin(RT*8);X.strokeStyle='#ffe066';X.lineWidth=3*s;X.beginPath();X.arc(0,2*s,30*s,0,TAU);X.stroke();X.fillStyle='rgba(255,240,150,.18)';X.fill()}
  X.restore()}
 /* flight rig: wings + arms phase-locked, legs pedal gently with bending knees */
@@ -169,7 +169,7 @@ const Title={menu:true,primary:'play',enter(){G=null;K.music.play(SONG_T);this.r
   K.logo('tl');K.drawFx()}};
 /* ---------- story ---------- */
 function panel(wi,fn){return(x,y,w,h,t)=>{X.save();X.translate(x,y);const im=K.img[WORLDS[wi].img];if(im&&im.naturalWidth){const sc=Math.max(w/im.naturalWidth,h/im.naturalHeight);X.drawImage(im,(w-im.naturalWidth*sc)/2,(h-im.naturalHeight*sc)/2,im.naturalWidth*sc,im.naturalHeight*sc)}fn(w,h,t);X.restore()}}
-function walker(x,y,sc,dist,dt,emo){GAIT.L=12.2*sc;GAIT.vw=30*sc;GAIT.vr=80*sc;GAIT.update(dist,dt);const p=walkPose();drawDuncan(x,y-p.bob*sc*.6,sc,{wing:p.wing,arms:p.arms,legs:p.legs,emo,armF:1})}
+function walker(x,y,sc,dist,dt,emo){GAIT.L=12.2*sc;GAIT.vw=30*sc;GAIT.vr=80*sc;GAIT.update(dist,dt);const p=walkPose();drawDuncan(x,y-p.bob*sc*.6,sc,{wing:p.wing,arms:p.arms,legs:p.legs,emo,armF:1,turn:dist>0?.9:0})}
 let lastStoryT=0;
 const STORY=[
  {draw:panel(0,(w,h,t)=>{const sc=w/230;const dt=Math.max(0,Math.min(.05,t-lastStoryT));lastStoryT=t;const stop=t>2.2;const x=w*.18+Math.min(t,2.2)*w*.2;
